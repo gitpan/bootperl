@@ -1,7 +1,7 @@
 #PERLSRC=../../perl/perl-5.8.3
 PERLSRC=../../perl/perl-5.9.1
 
-CC=ccache distcc cc
+CC=cc
 STRIP=strip
 
 .PHONY: all
@@ -74,8 +74,10 @@ strip:
 	$(STRIP) $(STRIP_FILES)
 	ls -l $(STRIP_FILES)
 
-.PHONY: clean distclean clean-extras
+.PHONY: clean distclean clean-extras maintainer-clean
 clean: clean-extras
 clean-extras:
 	-xargs rm -f <.links
 	-rm -f .links perly.* $(O) microperl ccopts *.o libmicroperl.a reentr.inc embed uconfig.h kembed *~
+
+maintainer-clean: clean

@@ -141,6 +141,7 @@ lfetch:	movw	moff, %si
 	movw	MAP+0(%si), %cx	/* get address */
 	movw	MAP+2(%si), %dx
 	movb	MAP+4(%si), %al
+	call	bsmith_dsk_debug /* XXX: moved from cread */
 	orw	%cx, %cx	/* at EOF ? */
 	jnz	noteof		/* no -> go on */
 	orw	%dx, %dx
@@ -404,7 +405,7 @@ bsmith_prtax:
 
 /* actual do read/write with retries: function passed in %ah */
 dsk_do_rw:
-	call	bsmith_dsk_debug
+	/*call	bsmith_dsk_debug*/
 dsk_do_int13:
 	pushw	%bp
 	movw	$5, %bp		/* number of tries */

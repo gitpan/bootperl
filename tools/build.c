@@ -179,28 +179,35 @@ int main(int argc, const char ** argv)
     inc_sector(&nextsector, BSECT_HEAD(bsect)->secaddr[j].num_sect);
   }
 
+  fprintf(stderr, "Patching second for map\n");
+  fprintf(stderr, "Starting at: ");
+  print_sector(&nextsector);
+
   /* patch second for map */
   SECOND_HEAD(second)->mapaddr[0] = nextsector;
   SECOND_HEAD(second)->mapaddr[0].num_sect = mapsize / 512;
-  inc_sector(&nextsector, 1);
+  inc_sector(&nextsector, SECOND_HEAD(second)->mapaddr[0].num_sect);
 
   fprintf(stderr, "Patching map for kernel\n");
+  fprintf(stderr, "Starting at: ");
+  print_sector(&nextsector);
+
   /* patch map for kernel (load kernel in 2K chunks) */
   for (i = 0, j = 0; i < (kernelsize / 512); j++) {
     int chunks = CHUNKS;
     int remaining = HEADS * SPT - (SPT * nextsector.head + nextsector.sector)
       + 1;
 
-    fprintf(stderr, "sector=%d spt=%d remaining=%d\n",
-      nextsector.sector, SPT, remaining);
+    /*fprintf(stderr, "sector=%d spt=%d remaining=%d\n",
+      nextsector.sector, SPT, remaining);*/
     if (remaining < chunks)
       chunks = remaining;
 
     SECT_ADDR(map)[j] = nextsector;
     SECT_ADDR(map)[j].num_sect = min((kernelsize / 512) - i, chunks);
 
-    fprintf(stderr, "%d: ", j);
-    print_sector(&SECT_ADDR(map)[j]);
+    /*fprintf(stderr, "%d: ", j);
+    print_sector(&SECT_ADDR(map)[j]);*/
 
     i += chunks;
 
@@ -208,10 +215,24 @@ int main(int argc, const char ** argv)
   }
 
   /* output the final image */
-  write(1, bsect, 512);
-  write(1, second, secondsize);
-  write(1, map, mapsize);
-  write(1, kernel, kernelsize);
+  {
+    int c, offset = 0;
+    
+    c = write(1, bsect, 512);
+    fprintf(stderr, "bsect: size=%-5d offset=0%04o\n", c, offset);
+    offset += c;
+  
+    c = write(1, second, secondsize);
+    fprintf(stderr, "bsect: size=%-5d offset=0%04o\n", c, offset);
+    offset += c;
+  
+    c = write(1, map, mapsize);
+    fprintf(stderr, "bsect: size=%-5d offset=0%04o\n", c, offset);
+    offset += c;
+  
+    c = write(1, kernel, kernelsize);
+    fprintf(stderr, "bsect: size=%-5d offset=0%04o\n", c, offset);
+  }
 
  cleanup:
   /* free mem */

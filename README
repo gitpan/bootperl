@@ -3,3 +3,15 @@ Bootable perl
 See perl/README for details about perl compatibility.
 It's based upon the latest sine sources I could locate, but using the old
 boot-trad bootloader from the latest xos sources I could locate.
+
+Remember to DISCONNECT ALL PARALLEL PORT device before using this kernel on a
+system.  For debugging with bochs all console and debug output is written
+to the virtual parallel port.  This is unlikely to be good on a real system.
+
+To compile:
+
+make init
+make
+
+To use run bochs in this directory, qemu using boot/image as the fda image,
+or write boot/image to a floppy.

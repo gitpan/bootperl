@@ -1,0 +1,7 @@
+name: bootperl
+version: 0.00_02
+abstract: Perl directly bootable on i386
+author: Benjamin Smith <bsmith@cpan.org>
+license: perl
+distribution_type: module
+generated_by: manually
