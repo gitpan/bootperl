@@ -1,0 +1,5 @@
+This has been tested with 5.8.3 and 5.9.1.
+It doesn't work with perl-current from 20040329.
+
+It will automatically link together all the right things, when you feed it the
+right directory.

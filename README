@@ -1,0 +1,5 @@
+Bootable perl
+
+See perl/README for details about perl compatibility.
+It's based upon the latest sine sources I could locate, but using the old
+boot-trad bootloader from the latest xos sources I could locate.
